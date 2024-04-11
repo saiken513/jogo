@@ -2,6 +2,7 @@ let rows = 10;
 let cols = 10;
 let numMines = 10;
 let timer;
+let cells;
 
 const board = document.getElementById('board');
 const easyBtn = document.getElementById('easy');
@@ -32,7 +33,7 @@ hardBtn.addEventListener('click', () => {
 function resetGame() {
   clearInterval(timer); // Limpa o temporizador se existir
   board.innerHTML = '';
-  createBoard(rows, cols, numMines);
+  cells = createBoard(rows, cols, numMines);
 }
 
 function startTimer() {
@@ -51,14 +52,10 @@ function handleClick(row, col, event) {
   const cell = cells[row][col];
   const cellElement = document.querySelector(`.cell[data-row="${row}"][data-col="${col}"]`);
 
-  // Verifica se a célula está marcada com a bandeira
-  const isFlagged = cellElement.classList.contains('flag');
-
   if (event.type === 'click') {
     if (cell.isMine) {
       cellElement.classList.add('mine');
-      alert('Game Over!');
-      revealMines();
+      alert('Você perdeu, tente novamente!');
       stopTimer(); // Para o temporizador quando o jogo termina
       resetGame();
     } else {
@@ -75,15 +72,7 @@ function handleClick(row, col, event) {
     }
   } else if (event.type === 'contextmenu') {
     event.preventDefault();
-
-    // Remove a marcação se a célula já estiver marcada com a bandeira
-    if (isFlagged && !cellElement.classList.contains('clicked')) {
-      cellElement.classList.remove('flag');
-      cell.isFlagged = false;
-    } else {
-      cellElement.classList.add('flag');
-      cell.isFlagged = true;
-    }
+    // Lógica para marcar com a bandeira
   }
 }
 
@@ -172,4 +161,4 @@ function openAdjacentCells(row, col) {
   }
 }
 
-const cells = createBoard(rows, cols, numMines);
+cells = createBoard(rows, cols, numMines);
